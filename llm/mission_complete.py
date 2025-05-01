@@ -1,4 +1,4 @@
-from llm import model
+from llm.model import model
 
 # LLM 프롬프트 생성 함수
 def generate_mission_summary(trash_data):

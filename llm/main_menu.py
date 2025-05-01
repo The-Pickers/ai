@@ -1,5 +1,5 @@
 import random
-from llm import model
+from llm.model import model
 
 def select_theme(carbon_reduction):
     if carbon_reduction < 1:
