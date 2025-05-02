@@ -1,34 +1,63 @@
 from llm.model import model
 
+
+CARBON_REDUCTION_PER_ITEM = {
+    'Aluminium foil': 0.02,
+    'Bottle cap': 0.01,
+    'Bottle': 0.1,
+    'Broken glass': 0.05,
+    'Can': 0.15,
+    'Carton': 0.08,
+    'Cigarette': 0.005,
+    'Cup': 0.07,
+    'Lid': 0.01,
+    'Other litter': 0.03,
+    'Other plastic': 0.05,
+    'Paper': 0.04,
+    'Plastic bag - wrapper': 0.06,
+    'Plastic container': 0.09,
+    'Pop tab': 0.01,
+    'Straw': 0.01,
+    'Styrofoam piece': 0.02,
+    'Unlabeled litter': 0.03,
+}
+
+def calculate_carbon(trash_counts):
+    total_carbon = 0
+    for item, count in trash_counts.items():
+        carbon_per_item = CARBON_REDUCTION_PER_ITEM.get(item, 0)
+        total_carbon += carbon_per_item * count
+    return total_carbon
+
 # LLM 프롬프트 생성 함수
 def generate_mission_summary(trash_data):
+    total_carbon = calculate_carbon(trash_data)
+    points = int(total_carbon * 1000)
     mission_complete_prompt = f"""
-You are a friendly and cheerful AI assistant who summarizes a user's trash collection activity into a short and encouraging English sentence.
+You are a cheerful assistant. Generate a short, positive English message about the user's trash collection.
 
-Here is the user's collected trash data:
-{trash_data}
+The total carbon reduction is:
+{total_carbon:.3f} kg
 
-🔧 Rules:
-1. Estimate the total **carbon reduction (kg)** and **trash weight (kg)** based on each type of trash.
-2. If any item type is unknown, use similar material or general knowledge to make a reasonable estimate.
-3. Create a short, kind summary **in English**, limited to **2 sentences max**. Be positive and inspiring.
-4. Follow this output format:
-   "You’ve reduced x kg of carbon and y kg of waste 💚🌏 [Short warm message]"
+💡 Rules:
+- Strictly use this format:
+  "Great job! {total_carbon:.3f} kg carbon reduced! 🌍💚"
+  or
+  "{total_carbon:.3f} kg CO₂ cut! Earth thanks you!"
+- Max 2 sentences.
+- Use diverse cheerful expressions.
+- Example outputs:
+  - Great job! 0.33 kg carbon reduced! 🌍💚
+  - 0.33 kg CO₂ cut! Earth thanks you! 🌱
+  - Bravo! 0.14 kg CO₂ saved! 🌎💖
 
-5. 💡 To help you vary your tone and avoid repetition, here are some example outputs:
- - Great job! 0.33 kg carbon, 0.51 kg trash gone! 🌍💚
- - 0.33 kg carbon and 0.51 kg waste reduced! Earth thanks you!
- - Nice work! 0.14 kg CO₂ and 0.4 kg waste reduced! 🌱
- - 0.19 kg carbon, 0.47 kg waste—go green warrior! 🌎
- - 0.112 kg carbon, 0.165 kg trash—Earth loves you! 💖
- - 0.15 kg carbon, 0.78 kg waste—you're a champ! 🏆
- - Eco-win! 0.17 kg carbon and 0.44 kg trash gone! 🌱
- - 0.237 kg carbon, 0.115 kg waste—recycling pro! 💚
- - Bravo! 0.17 kg carbon and 0.4 kg waste cut! 💖🌿
- - Champion move! 0.17 kg carbon, 0.38 kg waste! 🌏
-
-6. Do **not reuse the same starting phrases repeatedly**. Be diverse in your expressions.
-7. Do **not add any explanation or comment** beyond the final message.
+⚠ Do not explain anything else. Only return the final message.
 """
+
     response = model.generate_content(mission_complete_prompt)
-    return response.text
+    return {
+    'message': response.text.strip(),
+    'total_carbon': total_carbon,
+    'points' : points
+    }
+
