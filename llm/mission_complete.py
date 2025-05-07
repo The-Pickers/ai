@@ -1,26 +1,12 @@
 from llm.model import model
+import json
+import os
 
+current_dir = os.path.dirname(__file__)  # mission_complete.py의 디렉토리 경로
+json_path = os.path.join(current_dir, "carbon_reduction_data.json")
 
-CARBON_REDUCTION_PER_ITEM = {
-    'Aluminium foil': 0.02,
-    'Bottle cap': 0.01,
-    'Bottle': 0.1,
-    'Broken glass': 0.05,
-    'Can': 0.15,
-    'Carton': 0.08,
-    'Cigarette': 0.005,
-    'Cup': 0.07,
-    'Lid': 0.01,
-    'Other litter': 0.03,
-    'Other plastic': 0.05,
-    'Paper': 0.04,
-    'Plastic bag - wrapper': 0.06,
-    'Plastic container': 0.09,
-    'Pop tab': 0.01,
-    'Straw': 0.01,
-    'Styrofoam piece': 0.02,
-    'Unlabeled litter': 0.03,
-}
+with open(json_path, "r") as f:
+    CARBON_REDUCTION_PER_ITEM = json.load(f)
 
 def calculate_carbon(trash_counts):
     total_carbon = 0

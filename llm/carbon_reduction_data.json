@@ -1,0 +1,20 @@
+{
+    "Aluminium foil": 0.015,
+    "Bottle cap": 0.005,
+    "Bottle": 0.045,
+    "Broken glass": 0.01,
+    "Can": 0.12,
+    "Carton": 0.03,
+    "Cigarette": 0.001,
+    "Cup": 0.04,
+    "Lid": 0.006,
+    "Other litter": 0.02,
+    "Other plastic": 0.03,
+    "Paper": 0.02,
+    "Plastic bag - wrapper": 0.025,
+    "Plastic container": 0.06,
+    "Pop tab": 0.002,
+    "Straw": 0.004,
+    "Styrofoam piece": 0.01,
+    "Unlabeled litter": 0.02
+}
