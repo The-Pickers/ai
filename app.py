@@ -4,8 +4,25 @@ import cv2
 import numpy as np
 from yolo.yolo_detector import detect_trash
 from llm.mission_complete import generate_mission_summary
+from llm.main_menu import generate_carbon_reduction_message
 
 app = Flask(__name__)
+
+@app.route('/main-message', methods=['POST'])
+def carbon_message():
+    data = request.json
+    carbon_reduction = data.get('carbon_reduction')
+
+    if carbon_reduction is None:
+        return jsonify({"error": "carbon_reduction value is required"}), 400
+
+    try:
+        carbon_reduction = float(carbon_reduction)
+    except ValueError:
+        return jsonify({"error": "carbon_reduction must be a number"}), 400
+
+    message = generate_carbon_reduction_message(carbon_reduction)
+    return jsonify({"message": message})
 
 @app.route('/analyze', methods=['POST'])
 def analyze_image():
