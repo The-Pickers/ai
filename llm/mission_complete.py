@@ -18,7 +18,7 @@ def calculate_carbon(trash_counts):
 # LLM 프롬프트 생성 함수
 def generate_mission_summary(trash_data):
     total_carbon = calculate_carbon(trash_data)
-    points = int(total_carbon * 1000)
+    points = int(total_carbon * 100)
     mission_complete_prompt = f"""
 You are a cheerful assistant. Generate a short, positive English message about the user's trash collection.
 
